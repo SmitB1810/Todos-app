@@ -43,7 +43,8 @@ function TaskItem(props) {
                 <div className="card-body">
                     <h5 className="card-title">{task.taskTitle}</h5>
                     <p className="card-text">{task.description}</p>
-                    <div className="card-footer text-left bg-white" style={{ display: "flex" }}>
+                    <hr />
+                    <div className="card-footer text-left bg-white" style={{ display: "contents" }}>
 
                         {/* <button type="button" id='datebtn' className="d-inline btn btn-primary mx-1" onClick={startTimeHandler}>S</button> */}
                         <FontAwesomeIcon icon={faHourglassStart} className="d-inline btn btn-primary mx-1" onClick={startTimeHandler}/>
@@ -52,7 +53,7 @@ function TaskItem(props) {
                         <FontAwesomeIcon icon={faHourglassEnd} className="d-inline btn btn-info" onClick={endTimeHandler}/>
 
                         {/* <button type="button" className="d-inline btn btn-success mx-1" onClick={() => modalOpen(task)}>E</button> */}
-                        <FontAwesomeIcon icon={faPenToSquare} className="d-inline btn btn-success mx-1" onClick={() => modalOpen(task)}/>
+                        <FontAwesomeIcon icon={faPenToSquare} className="d-inline btn btn-success mx-1 ms-4" onClick={() => modalOpen(task)}/>
                         
                         {/* <button type="button" className="d-inline btn btn-danger" onClick={() => { deleteTask(task._id) }}>D</button> */}
                         <FontAwesomeIcon icon={faTrash} className="d-inline btn btn-danger" onClick={() => { deleteTask(task._id) }}/>
@@ -60,7 +61,7 @@ function TaskItem(props) {
                     </div>
                 </div>
                 <div className="card-footer date text-muted justify-content-center d-flex">
-                    {startTime} | {endTime}
+                    Start: {startTime} | End: {endTime}
                 </div>
             </div>
         </div>

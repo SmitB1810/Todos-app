@@ -8,8 +8,7 @@ const { check, validationResult } = require('express-validator');
 router.get('/fetchalltasks', async (req, res) => {
     try {
         const tasks = await Tasks.find();
-        res.json(tasks)
-
+        res.json(tasks);
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal server error");
