@@ -19,7 +19,7 @@ router.get('/fetchalltasks', async (req, res) => {
 router.post('/addtask', [
     check('taskTitle').isLength({ min: 2 }),
     check('description').isLength({ min: 3 }),
-    check('tag').isLength({ min:1, max: 4 }),
+    check('tag').isLength({ min: 1, max: 4 }),
 ], async (req, res) => {
     try {
 
@@ -48,7 +48,7 @@ router.post('/addtask', [
 router.put('/updatetask/:id', [
     check('taskTitle').isLength({ min: 2 }),
     check('description').isLength({ min: 3 }),
-    check('tag').isLength({ min:1, max: 4 }),
+    check('tag').isLength({ min: 1, max: 4 }),
 ], async (req, res) => {
     try {
 
@@ -79,10 +79,21 @@ router.delete('/deletetask/:id', async (req, res) => {
     let task = await Task.findById(req.params.id);
     if (!task) { return res.status(404).send("Not Found") }
 
-    task = await Task.findByIdAndDelete(req.params.id)
+    task = await Task.findByIdAndDelete(req.params.id);
     res.send(task);
 })
 
 
+router.get('/search/:key', async (req, resp) => {
+    const data = await Tasks.find({
+        "$or": [
+            { taskTitle: { $regex: req.params.key } },
+            { description: { $regex: req.params.key } },
+            { tag: { $regex: req.params.key } }
+        ]
+    })
+    if (!data || data.length === 0) resp.status(400).send({ error: "No task was found" })
+    resp.status(200).send(data)
+})
 
 module.exports = router

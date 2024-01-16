@@ -1,6 +1,31 @@
-import { React } from "react";
+import { React, useContext, useEffect, useState } from "react";
+import TaskContext from "../context/TaskContext";
+import TaskItem from "./TaskItem";
 
 const Header = () => {
+
+    const [task, setTask] = useState([]);
+    const { tasks, getTasks } = useContext(TaskContext);
+
+    const searchHandle = async (e) => {
+        let key = e.target.value;
+        if (key) {
+            let resp = await fetch(`http://localhost:5000/api/tasks/search/${key}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            resp = await resp.json();
+            if (resp) {
+                setTask(resp);
+            }
+        } else {
+            getTasks();
+        }
+    }
+
+
     return (
         <>
             <div>
@@ -20,13 +45,19 @@ const Header = () => {
                                 </li>
                             </ul>
                             <form className="d-flex" role="search">
-                                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"></input>
-                                    <button className="btn btn-outline-success" type="submit">Search</button>
+                                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" onChange={searchHandle}></input>
+                                <button className="btn btn-outline-success" type="submit">Search</button>
                             </form>
+                            {/* <Link className="link" to="/Login" role="button" >Login</Link>
+                            <Link className="link" to="/Signup" role="button" >Signup</Link> */}
+
                         </div>
                     </div>
-                </nav>
-            </div>
+                </nav >
+            </div >
+            {task.map((task) => {
+                return <TaskItem key={task._id} task={task}/>
+            })}
         </>
     )
 }
