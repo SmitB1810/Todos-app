@@ -4,12 +4,14 @@ import { TaskContext } from "./TaskContext";
 function TaskState(props) {
     const taskInitial = [];
     const [tasks, setTasks] = useState(taskInitial);
+    const [user, setUserState] = useState(taskInitial);
 
     const getTasks = async () => {
         const resp = await fetch('http://localhost:5000/api/tasks/fetchalltasks', {
           method: 'GET',
           headers:{
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'auth-token':localStorage.getItem('token')
           }
         });
         const data = await resp.json();
@@ -25,7 +27,8 @@ function TaskState(props) {
         const resp = await fetch('http://localhost:5000/api/tasks/addtask', {
           method: 'POST',
           headers:{
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'auth-token':localStorage.getItem('token')
           },
           body: JSON.stringify(task)
         });
@@ -42,7 +45,8 @@ function TaskState(props) {
         const resp = await fetch(`http://localhost:5000/api/tasks/updatetask/${id}`, {
           method: 'PUT',
           headers:{
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'auth-token':localStorage.getItem('token')
           },
           body: JSON.stringify(task)
         });
@@ -53,15 +57,28 @@ function TaskState(props) {
         const resp = await fetch(`http://localhost:5000/api/tasks/deletetask/${id}`, {
           method: 'DELETE',
           headers:{
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'auth-token':localStorage.getItem('token')
           }
         });
         getTasks();
       }
 
+      const setUser = async (id) => {
+        const resp = await fetch("http://localhost:5000/api/users/getuser", {
+          method: 'POST',
+          headers:{
+            'Content-Type': 'application/json',
+            'auth-token':localStorage.getItem('token')
+          }
+        });
+        const json = await resp.json();
+        let user = {name: json.name, email:json.email};
+        setUserState(user);
+      }
     return (
         <div>
-            <TaskContext.Provider value={{ tasks, getTasks, addTask, editTask, deleteTask, setTasks}}>
+            <TaskContext.Provider value={{ tasks, getTasks, addTask, editTask, deleteTask, setUser}}>
                 {props.children}      
             </TaskContext.Provider>
         </div>

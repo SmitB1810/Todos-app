@@ -7,8 +7,8 @@ import Header from './components/Header';
 import Home from './components/Home';
 // @ts-ignore
 import Footer from './components/Footer';
-// import Login from './components/Login';
-// import Signup from './components/Signup';
+import Login from './components/Login';
+import Signup from './components/Signup';
 
 // import TaskState from './context/TaskState';
 import TaskContext from './context/TaskContext';
@@ -22,7 +22,8 @@ function App() {
     let resp = await fetch('http://localhost:5000/api/tasks/fetchalltasks', {
       method: 'GET',
       headers:{
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'auth-token':localStorage.getItem('token')
       }
     });
     const data = await resp.json();
@@ -39,7 +40,8 @@ function App() {
     let resp = await fetch('http://localhost:5000/api/tasks/addtask', {
       method: 'POST',
       headers:{
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'auth-token':localStorage.getItem('token')
       },
       body: JSON.stringify(task)
     });
@@ -56,7 +58,8 @@ function App() {
     let resp = await fetch(`http://localhost:5000/api/tasks/updatetask/${id}`, {
       method: 'PUT',
       headers:{
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'auth-token':localStorage.getItem('token')
       },
       body: JSON.stringify(task)
     });
@@ -67,7 +70,8 @@ function App() {
     let resp = await fetch(`http://localhost:5000/api/tasks/deletetask/${id}`, {
       method: 'DELETE',
       headers:{
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'auth-token':localStorage.getItem('token')
       }
     });
     getTasks();
@@ -82,8 +86,8 @@ function App() {
           <div className="App">
             <Routes>
               <Route path="/" element={<Home />} />
-              {/* <Route path="/signup" element={<Login />} /> */}
-              {/* <Route path="/login" element={<Signup />} /> */}
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
             </Routes>
           </div>
         </Router>

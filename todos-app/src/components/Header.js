@@ -1,4 +1,5 @@
 import { React, useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from 'react-router-dom'
 import TaskContext from "../context/TaskContext";
 import TaskItem from "./TaskItem";
 
@@ -6,6 +7,8 @@ const Header = () => {
 
     const [task, setTask] = useState([]);
     const { tasks, getTasks } = useContext(TaskContext);
+
+    const nevigate = useNavigate();
 
     const searchHandle = async (e) => {
         let key = e.target.value;
@@ -17,6 +20,7 @@ const Header = () => {
                 }
             })
             resp = await resp.json();
+            JSON.stringify(resp)
             if (resp) {
                 setTask(resp);
             }
@@ -25,6 +29,10 @@ const Header = () => {
         }
     }
 
+    const logoutHandle = () => {
+        localStorage.removeItem('token');
+        nevigate('/login');
+    }
 
     return (
         <>
@@ -44,19 +52,24 @@ const Header = () => {
                                     <a className="nav-link" href="#">About</a>
                                 </li>
                             </ul>
-                            <form className="d-flex" role="search">
-                                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" onChange={searchHandle}></input>
-                                <button className="btn btn-outline-success" type="submit">Search</button>
-                            </form>
-                            {/* <Link className="link" to="/Login" role="button" >Login</Link>
-                            <Link className="link" to="/Signup" role="button" >Signup</Link> */}
 
+                            {localStorage.getItem('token') ? (<>
+                                <form className="d-flex" role="search">
+                                    <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" onChange={searchHandle}></input>
+                                    <button className="btn btn-outline-success" type="submit">Search</button>
+                                </form>
+                                <Link className="link btn btn-primary ms-4" role="button" onClick={logoutHandle} >logout</Link>
+                            </>) : (<>
+                                <Link className="link btn btn-primary ms-2" to="/Login" role="button" >Login</Link>
+                                <Link className="link btn btn-primary ms-2" to="/Signup" role="button" >Signup</Link>
+                            </>)
+                            }
                         </div>
                     </div>
                 </nav >
             </div >
             {task.map((task) => {
-                return <TaskItem key={task._id} task={task}/>
+                return <TaskItem key={task._id} task={task} />
             })}
         </>
     )

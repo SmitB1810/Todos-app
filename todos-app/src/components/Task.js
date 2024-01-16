@@ -7,7 +7,7 @@ import { faDoorClosed, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 
 function Task() {
     const context = useContext(TaskContext);
-    const { tasks, getTasks, editTask } = context;
+    const { tasks, getTasks, editTask, setUser } = context;
 
     const ref = useRef(null);
     const refClose = useRef(null);
@@ -15,7 +15,10 @@ function Task() {
     const [task, setTask] = useState({ id: "", etaskTitle: "", edescription: "", etag: "" });
 
     useEffect(() => {
-        getTasks();
+        if (localStorage.getItem('toekn')) {
+            getTasks();
+            setUser(localStorage.getItem('toekn'));
+        }
     }, []);
 
     const onChangeHandler = (e) => {
@@ -67,7 +70,7 @@ function Task() {
                                     <FontAwesomeIcon icon={faDoorClosed} /> Close
                                 </button>
                                 <button disabled={(task.etaskTitle.length <= 2 || task.edescription.length <= 3 || (task.etag.length <= 1 || task.etag.length >= 4))} type="button" className="btn btn-primary" onClick={onClickHandler}>
-                                <FontAwesomeIcon icon={faFloppyDisk} /> Save Change
+                                    <FontAwesomeIcon icon={faFloppyDisk} /> Save Change
                                 </button>
                             </div>
                         </div>

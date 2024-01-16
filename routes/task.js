@@ -3,9 +3,10 @@ const router = express.Router();
 const Tasks = require('../models/Tasks');
 const Task = require('../models/Tasks');
 const { check, validationResult } = require('express-validator');
+const fetchuser = require('../middleware/fetchuser');
 
 
-router.get('/fetchalltasks', async (req, res) => {
+router.get('/fetchalltasks', fetchuser, async (req, res) => {
     try {
         const tasks = await Tasks.find();
         res.json(tasks);
@@ -16,7 +17,7 @@ router.get('/fetchalltasks', async (req, res) => {
 })
 
 
-router.post('/addtask', [
+router.post('/addtask', fetchuser, [
     check('taskTitle').isLength({ min: 2 }),
     check('description').isLength({ min: 3 }),
     check('tag').isLength({ min: 1, max: 4 }),
@@ -45,7 +46,7 @@ router.post('/addtask', [
 })
 
 
-router.put('/updatetask/:id', [
+router.put('/updatetask/:id', fetchuser, [
     check('taskTitle').isLength({ min: 2 }),
     check('description').isLength({ min: 3 }),
     check('tag').isLength({ min: 1, max: 4 }),
@@ -75,7 +76,7 @@ router.put('/updatetask/:id', [
 })
 
 
-router.delete('/deletetask/:id', async (req, res) => {
+router.delete('/deletetask/:id', fetchuser, async (req, res) => {
     let task = await Task.findById(req.params.id);
     if (!task) { return res.status(404).send("Not Found") }
 

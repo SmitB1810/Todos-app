@@ -74,7 +74,6 @@ router.post('/login', [
 
         }
 
-
         const data = {
             user: {
                 id: user.id
@@ -87,7 +86,6 @@ router.post('/login', [
         console.error(error.message);
         res.status(500).send("Internal server error");
     }
-
 })
 
 
